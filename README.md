@@ -1,2 +1,2 @@
-# fullstackdevelopment
-My repository for fsd
+
+My repository for fsd where i practice
