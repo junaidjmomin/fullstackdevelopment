@@ -1,0 +1,454 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap');
+
+/* ─── Reset ─────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── CSS Variables ──────────────────────────────────────── */
+:root {
+  --bg:            #0a0a0f;
+  --surface:       rgba(255, 255, 255, 0.03);
+  --border:        rgba(255, 255, 255, 0.07);
+  --border-hover:  rgba(255, 255, 255, 0.12);
+  --text-primary:  #e8e4d9;
+  --text-muted:    #c8c4b9;
+  --text-dim:      #555;
+  --text-dimmer:   #444;
+  --text-dark:     #333;
+  --text-darkest:  #3a3a3a;
+
+  --gold:          #ffc850;
+  --gold-dark:     #ff9a3c;
+  --teal:          #64dcaa;
+  --red:           #ff6b6b;
+
+  --income-bg:     rgba(100, 220, 170, 0.1);
+  --income-border: rgba(100, 220, 170, 0.2);
+  --income-border-active: rgba(100, 220, 170, 0.4);
+  --expense-bg:    rgba(255, 107, 107, 0.1);
+  --expense-border: rgba(255, 100, 100, 0.2);
+  --expense-border-active: rgba(255, 107, 107, 0.4);
+  --balance-border: rgba(255, 200, 80, 0.2);
+
+  --radius-card:   16px;
+  --radius-input:  10px;
+  --radius-sm:     6px;
+
+  --font-display:  'Playfair Display', serif;
+  --font-mono:     'DM Mono', monospace;
+
+  --transition-fast:   0.15s ease;
+  --transition-base:   0.2s ease;
+}
+
+/* ─── App Shell ──────────────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(255, 200, 80, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(100, 200, 180, 0.04) 0%, transparent 50%);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  padding: 2rem 1rem;
+}
+
+/* ─── Header ─────────────────────────────────────────────── */
+.header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dark) 50%, var(--text-primary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.4rem;
+}
+
+.header p {
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 300;
+}
+
+/* ─── Layout Grid ────────────────────────────────────────── */
+.main-grid {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Summary Row ────────────────────────────────────────── */
+.summary-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .summary-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Base Card ──────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  transition: border-color var(--transition-base);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-card);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent);
+  pointer-events: none;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+}
+
+/* ─── Summary Cards ──────────────────────────────────────── */
+.summary-card {
+  padding: 1.25rem 1.5rem;
+}
+
+.summary-card .label {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.summary-card .amount {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.summary-card .badge {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+/* Balance card */
+.balance-card {
+  border-color: var(--balance-border);
+}
+.balance-card .amount { color: var(--gold); }
+.balance-card .badge  { background: var(--gold); }
+
+/* Income card */
+.income-card {
+  border-color: var(--income-border);
+}
+.income-card .amount { color: var(--teal); }
+.income-card .badge  { background: var(--teal); }
+
+/* Expense card */
+.expense-card {
+  border-color: var(--expense-border);
+}
+.expense-card .amount { color: var(--red); }
+.expense-card .badge  { background: var(--red); }
+
+/* ─── Form Card ──────────────────────────────────────────── */
+.form-card {
+  grid-column: 1 / 2;
+}
+
+.form-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ─── Form Groups ────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.63rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-input);
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color var(--transition-base), background var(--transition-base);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.form-group input::placeholder {
+  color: var(--text-darkest);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: rgba(255, 200, 80, 0.4);
+  background: rgba(255, 200, 80, 0.03);
+}
+
+.form-group select option {
+  background: #1a1a20;
+  color: var(--text-primary);
+}
+
+/* ─── Type Toggle ────────────────────────────────────────── */
+.type-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.type-btn {
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-input);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.type-btn.active-income {
+  background: var(--income-bg);
+  border-color: var(--income-border-active);
+  color: var(--teal);
+}
+
+.type-btn.active-expense {
+  background: var(--expense-bg);
+  border-color: var(--expense-border-active);
+  color: var(--red);
+}
+
+/* ─── Submit Button ──────────────────────────────────────── */
+.submit-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  border: none;
+  border-radius: var(--radius-input);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity var(--transition-base), transform var(--transition-fast);
+}
+
+.submit-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── Error Message ──────────────────────────────────────── */
+.error-msg {
+  font-size: 0.68rem;
+  color: var(--red);
+  margin-top: 0.4rem;
+  letter-spacing: 0.05em;
+}
+
+/* ─── Transaction List Card ──────────────────────────────── */
+.list-card {
+  grid-column: 2 / 3;
+}
+
+@media (max-width: 640px) {
+  .form-card,
+  .list-card {
+    grid-column: 1 / -1;
+  }
+}
+
+.list-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.list-card h2 .count {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dimmer);
+  letter-spacing: 0.15em;
+  font-weight: 400;
+}
+
+/* ─── Transaction List ───────────────────────────────────── */
+.tx-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.tx-list::-webkit-scrollbar        { width: 3px; }
+.tx-list::-webkit-scrollbar-track  { background: transparent; }
+.tx-list::-webkit-scrollbar-thumb  { background: #2a2a2a; border-radius: 2px; }
+
+/* ─── Transaction Item ───────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tx-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-input);
+  transition: all var(--transition-base);
+  animation: slideIn 0.25s ease;
+}
+
+.tx-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Transaction Dot ────────────────────────────────────── */
+.tx-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tx-dot.income  { background: var(--teal); box-shadow: 0 0 6px rgba(100, 220, 170, 0.5); }
+.tx-dot.expense { background: var(--red);  box-shadow: 0 0 6px rgba(255, 107, 107, 0.5); }
+
+/* ─── Transaction Text ───────────────────────────────────── */
+.tx-desc {
+  flex: 1;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tx-amount {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.tx-amount.income  { color: var(--teal); }
+.tx-amount.expense { color: var(--red); }
+
+/* ─── Delete Button ──────────────────────────────────────── */
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text-dark);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  line-height: 1;
+  font-size: 1rem;
+}
+
+.delete-btn:hover {
+  color: var(--red);
+  background: var(--expense-bg);
+}
+
+/* ─── Empty State ────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--text-dark);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
