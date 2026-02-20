@@ -1,4 +1,4 @@
-use client;
+"use client";
 
 import { KeyboardEvent, useReducer, useState } from "react";
 import "./expense-tracker.css";
