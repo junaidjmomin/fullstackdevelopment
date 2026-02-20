@@ -1,4 +1,4 @@
-"use client";
+use client;
 
 import { KeyboardEvent, useReducer, useState } from "react";
 import "./expense-tracker.css";
@@ -71,9 +71,9 @@ export default function ExpenseTracker() {
   const balance = totalIncome - totalExpenses;
 
   const formatCurrency = (value: number) =>
-    new Intl.NumberFormat("en-US", {
+    new Intl.NumberFormat("en-IN", {
       style: "currency",
-      currency: "USD",
+      currency: "INR",
       maximumFractionDigits: 2,
     }).format(value);
 
@@ -107,119 +107,119 @@ export default function ExpenseTracker() {
 
   return (
     <div className="app">
-        <header className="header">
-          <h1>Ledger</h1>
-          <p>Personal Finance Tracker</p>
-        </header>
+      <header className="header">
+        <h1>Ledger</h1>
+        <p>Personal Finance Tracker</p>
+      </header>
 
-        <div className="main-grid">
-          {/* Summary Row */}
-          <div className="summary-row">
-            <div className="card summary-card balance-card">
-              <div className="label"><span className="badge" />Balance</div>
-              <div className="amount">{formatCurrency(balance)}</div>
-            </div>
-            <div className="card summary-card income-card">
-              <div className="label"><span className="badge" />Total Income</div>
-              <div className="amount">{formatCurrency(totalIncome)}</div>
-            </div>
-            <div className="card summary-card expense-card">
-              <div className="label"><span className="badge" />Total Expenses</div>
-              <div className="amount">{formatCurrency(totalExpenses)}</div>
-            </div>
+      <div className="main-grid">
+        {/* Summary Row */}
+        <div className="summary-row">
+          <div className="card summary-card balance-card">
+            <div className="label"><span className="badge" />Balance</div>
+            <div className="amount">{formatCurrency(balance)}</div>
           </div>
-
-          {/* Add Transaction */}
-          <div className="card form-card">
-            <h2>Add Transaction</h2>
-
-            <div className="form-group">
-              <label>Description</label>
-              <input
-                type="text"
-                placeholder="e.g. Coffee, Salary..."
-                value={form.description}
-                onChange={(e) => { setForm({ ...form, description: e.target.value }); setError(""); }}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Amount (USD)</label>
-              <input
-                type="number"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                value={form.amount}
-                onChange={(e) => { setForm({ ...form, amount: e.target.value }); setError(""); }}
-                onKeyDown={handleAmountEnter}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Type</label>
-              <div className="type-toggle">
-                <button
-                  type="button"
-                  className={`type-btn ${form.type === "income" ? "active-income" : ""}`}
-                  onClick={() => setForm({ ...form, type: "income" })}
-                >
-                  ↑ Income
-                </button>
-                <button
-                  type="button"
-                  className={`type-btn ${form.type === "expense" ? "active-expense" : ""}`}
-                  onClick={() => setForm({ ...form, type: "expense" })}
-                >
-                  ↓ Expense
-                </button>
-              </div>
-            </div>
-
-            {error && <div className="error-msg">{error}</div>}
-
-            <button
-              type="button"
-              className="submit-btn"
-              onClick={handleAdd}
-              disabled={!form.description.trim() || !form.amount}
-            >
-              + Add Transaction
-            </button>
+          <div className="card summary-card income-card">
+            <div className="label"><span className="badge" />Total Income</div>
+            <div className="amount">{formatCurrency(totalIncome)}</div>
           </div>
-
-          {/* Transaction List */}
-          <div className="card list-card">
-            <h2>
-              Transactions
-              <span className="count">{state.transactions.length} entries</span>
-            </h2>
-
-            {state.transactions.length === 0 ? (
-              <div className="empty-state">No transactions yet.</div>
-            ) : (
-              <div className="tx-list">
-                {state.transactions.map((transaction) => (
-                  <div className="tx-item" key={transaction.id}>
-                    <span className={`tx-dot ${transaction.type}`} />
-                    <span className="tx-desc">{transaction.description}</span>
-                    <span className={`tx-amount ${transaction.type}`}>
-                      {transaction.type === "income" ? "+" : "−"}{formatCurrency(transaction.amount)}
-                    </span>
-                    <button
-                      type="button"
-                      className="delete-btn"
-                      onClick={() => handleDelete(transaction.id)}
-                      title="Remove transaction"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="card summary-card expense-card">
+            <div className="label"><span className="badge" />Total Expenses</div>
+            <div className="amount">{formatCurrency(totalExpenses)}</div>
           </div>
         </div>
+
+        {/* Add Transaction */}
+        <div className="card form-card">
+          <h2>Add Transaction</h2>
+
+          <div className="form-group">
+            <label>Description</label>
+            <input
+              type="text"
+              placeholder="e.g. Coffee, Salary..."
+              value={form.description}
+              onChange={(e) => { setForm({ ...form, description: e.target.value }); setError(""); }}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Amount (INR)</label>
+            <input
+              type="number"
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              value={form.amount}
+              onChange={(e) => { setForm({ ...form, amount: e.target.value }); setError(""); }}
+              onKeyDown={handleAmountEnter}
+            />
+          </div>
+
+          <div className="form-group">
+            <label>Type</label>
+            <div className="type-toggle">
+              <button
+                type="button"
+                className={`type-btn ${form.type === "income" ? "active-income" : ""}`}
+                onClick={() => setForm({ ...form, type: "income" })}
+              >
+                ↑ Income
+              </button>
+              <button
+                type="button"
+                className={`type-btn ${form.type === "expense" ? "active-expense" : ""}`}
+                onClick={() => setForm({ ...form, type: "expense" })}
+              >
+                ↓ Expense
+              </button>
+            </div>
+          </div>
+
+          {error && <div className="error-msg">{error}</div>}
+
+          <button
+            type="button"
+            className="submit-btn"
+            onClick={handleAdd}
+            disabled={!form.description.trim() || !form.amount}
+          >
+            + Add Transaction
+          </button>
+        </div>
+
+        {/* Transaction List */}
+        <div className="card list-card">
+          <h2>
+            Transactions
+            <span className="count">{state.transactions.length} entries</span>
+          </h2>
+
+          {state.transactions.length === 0 ? (
+            <div className="empty-state">No transactions yet.</div>
+          ) : (
+            <div className="tx-list">
+              {state.transactions.map((transaction) => (
+                <div className="tx-item" key={transaction.id}>
+                  <span className={`tx-dot ${transaction.type}`} />
+                  <span className="tx-desc">{transaction.description}</span>
+                  <span className={`tx-amount ${transaction.type}`}> 
+                    {transaction.type === "income" ? "+" : "−"}{formatCurrency(transaction.amount)}
+                  </span>
+                  <button
+                    type="button"
+                    className="delete-btn"
+                    onClick={() => handleDelete(transaction.id)}
+                    title="Remove transaction"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+    </div>
   );
 }
